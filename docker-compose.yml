@@ -4,9 +4,9 @@ services:
   api:
     build: api
     container_name: api
-		restart: unless-stopped
-		env_file:
-			api.env
+    restart: unless-stopped
+    env_file:
+      api.env
     depends_on:
       - mongodb
     networks:
@@ -18,8 +18,8 @@ services:
     container_name: mongodb
     restart: unless-stopped
     command: mongod --auth
-		env_file:
-			mongodb.env
+    env_file:
+      mongodb.env
     volumes:
       - /data/db:/data/db
     networks:
