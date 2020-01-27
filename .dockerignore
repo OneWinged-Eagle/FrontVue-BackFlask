@@ -1,0 +1,8 @@
+.vscode
+
+.editorconfig
+
+.git*
+README.md
+
+*.example
