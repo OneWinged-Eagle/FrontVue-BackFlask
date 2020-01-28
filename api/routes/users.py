@@ -12,12 +12,15 @@ class UsersApi(Resource):
 	@jwt_required
 	def get(self):
 		try:
-			me = User.objects.exclude("password").get(id=get_jwt_identity())
+			me = User.objects.get(id=get_jwt_identity())
 			if me.role != "admin":
 				return {"msg": "Can't retrieve users"}, 403
 
 			return Response(
-			    User.objects().to_json(), 200, mimetype="application/json")
+			    User.objects().exclude("password").to_json(),
+			    200,
+			    mimetype="application/json")
+
 		except Exception as e:
 			return {"msg": f"Something went wrong during a get on users ({e})"}, 500
 
@@ -29,15 +32,16 @@ class UsersApi(Resource):
 				return {"msg": "Can't create user"}, 403
 
 			user = User(**request.get_json())
-			if user.role == "admin":
-				return {"msg": "Can't create admin"}, 403
-
 			user.hashPassword()
+			user.role = "user"
+
 			user.save()
+
 			return Response(
 			    user.exclude("password").to_json(), 200, mimetype="application/json")
+
 		except (FieldDoesNotExist, ValidationError) as e:
-			return {"msg": f"The user is missing critical data ({e})"}, 400
+			return {"msg": f"The user isn't correctly formatted ({e})"}, 400
 		except NotUniqueError as e:
 			return {"msg": f"This user already exists ({e})"}, 400
 		except Exception as e:
@@ -57,6 +61,7 @@ class UserApi(Resource):
 			    User.objects.exclude("password").get(id=id).to_json(),
 			    200,
 			    mimetype="application/json")
+
 		except DoesNotExist as e:
 			return {"msg": f"This user doesn't exist ({e})"}, 400
 		except Exception as e:
@@ -75,7 +80,7 @@ class UserApi(Resource):
 
 			body, password = request.get_json(), userToUpdate.password
 
-			if "password" in body and body["password"] != password:
+			if "password" in body:
 				password = generate_password_hash(body["password"]).decode("utf8")
 
 			User.objects(id=id).update(
@@ -85,8 +90,9 @@ class UserApi(Resource):
 			    User.objects.exclude("password").get(id=id).to_json(),
 			    200,
 			    mimetype="application/json")
+
 		except (FieldDoesNotExist, ValidationError) as e:
-			return {"msg": f"The user is missing critical data ({e})"}, 400
+			return {"msg": f"The user isn't correctly formatted ({e})"}, 400
 		except DoesNotExist as e:
 			return {"msg": f"This user doesn't exist ({e})"}, 400
 		except Exception as e:
@@ -105,6 +111,7 @@ class UserApi(Resource):
 
 			user.delete()
 			return "", 200
+
 		except DoesNotExist as e:
 			return {"msg": f"This user doesn't exist ({e})"}, 400
 		except Exception as e:

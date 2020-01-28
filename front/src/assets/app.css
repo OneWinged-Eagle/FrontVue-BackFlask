@@ -1,0 +1,14 @@
+/* singletons and other data */
+.container.data > .layout > .flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container.data > .layout > .flex > span {
+  flex-grow: 1;
+  border: 1px solid #cfd8dc; /* blue-grey lighten-4 */
+  border-radius: 3px;
+  margin-left: 1em;
+  text-align: center;
+}

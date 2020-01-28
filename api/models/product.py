@@ -1,3 +1,4 @@
+from bson import json_util
 from datetime import datetime
 
 from db import db
@@ -17,4 +18,9 @@ class Product(db.Document):
 	price = db.DecimalField(0, precision=2, required=True)
 	location = db.EmbeddedDocumentField(Location, required=True)
 	dateAdded = db.DateTimeField(default=datetime.now, required=True)
-	seller = db.ReferenceField(User, True, 2, required=True)
+	seller = db.LazyReferenceField(User, reverse_delete_rule=2, required=True)
+
+	def to_json(self):
+		data = self.to_mongo()
+		data["seller"] = self.seller.fetch().exclude("password").to_json()
+		return json_util.dumps(data)

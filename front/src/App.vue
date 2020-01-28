@@ -1,32 +1,37 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+	<v-app dark>
+		<app-snackbar />
+
+		<app-drawer :drawer.sync="drawer" />
+
+		<app-toolbar :drawer.sync="drawer" />
+
+		<v-content>
+			<v-container fill-height fluid tag="section">
+				<v-fade-transition mode="out-in">
+					<router-view :key="$route.fullPath" />
+				</v-fade-transition>
+			</v-container>
+		</v-content>
+
+		<app-footer />
+	</v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script lang="ts">
+import Vue from "vue"
+import Component from "vue-class-component"
+
+import AppSnackbar from "./components/app/Snackbar.vue"
+import AppDrawer from "./components/app/Drawer.vue"
+import AppToolbar from "./components/app/Toolbar.vue"
+import AppFooter from "./components/app/Footer.vue"
+
+@Component({
+  name: "App",
+  components: { AppSnackbar, AppDrawer, AppToolbar, AppFooter }
+})
+export default class App extends Vue {
+  drawer = false
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+</script>
