@@ -10,6 +10,8 @@
 
 		<v-btn color="accent" text outlined @click="signup">Signup</v-btn>
 
+		<v-spacer />
+
 		<span class="overline">
 			Need to
 			<router-link :to="{ name: 'Login', params: { nextUrl: $route.params.nextUrl }}">login</router-link>?

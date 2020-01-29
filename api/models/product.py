@@ -22,5 +22,5 @@ class Product(db.Document):
 
 	def to_json(self):
 		data = self.to_mongo()
-		data["seller"] = self.seller.fetch().exclude("password").to_json()
+		data.seller = self.seller.fetch().to_json()
 		return json_util.dumps(data)

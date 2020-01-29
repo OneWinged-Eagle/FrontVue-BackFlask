@@ -41,8 +41,8 @@ class LoginApi(Resource):
 				        "The login request is missing critical data (email or password not provided)"
 				}, 400
 
-			user = User.objects.get(email=body["email"])
-			if not user.checkPassword(body["password"]):
+			user = User.objects.get(email=body.email)
+			if not user.checkPassword(body.password):
 				return {"msg": "The email and password provided don't match"}, 401
 
 			token = create_access_token(str(user.id), expires_delta=timedelta(7))

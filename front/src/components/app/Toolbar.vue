@@ -6,7 +6,15 @@
 
 		<v-spacer />
 
-		<v-btn v-show="isLogged" color="accent" outlined rounded @click="clear">Log out</v-btn>
+		<v-btn v-if="isLogged" color="accent" outlined rounded @click="clear">Log out</v-btn>
+
+		<v-btn
+			v-else
+			color="success"
+			outlined
+			rounded
+			:to="{name: 'Login', params: { nextUrl: $route.fullPath }}"
+		>Log in</v-btn>
 	</v-app-bar>
 </template>
 
