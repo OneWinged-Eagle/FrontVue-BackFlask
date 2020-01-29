@@ -17,7 +17,7 @@ class UsersApi(Resource):
 				return {"msg": "Can't retrieve users"}, 403
 
 			return Response(
-			    User.objects().to_json(), 200, mimetype="application/json")
+			    User.objects.all().to_json(), 200, mimetype="application/json")
 
 		except Exception as e:
 			return {"msg": f"Something went wrong during a get on users ({e})"}, 500
@@ -78,7 +78,7 @@ class UserApi(Resource):
 			if "password" in body:
 				password = generate_password_hash(body.password).decode("utf8")
 
-			User.objects(id=id).update(
+			User.objects.get(id=id).update(
 			    email=body.get("email", userToUpdate.email), password=password)
 
 			return Response(

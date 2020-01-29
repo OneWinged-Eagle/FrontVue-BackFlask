@@ -14,7 +14,7 @@ class ProductsApi(Resource):
 	def get(self):
 		try:
 			return Response(
-			    Product.objects().to_json(), 200, mimetype="application/json")
+			    Product.objects.all().to_json(), 200, mimetype="application/json")
 
 		except Exception as e:
 			return {
