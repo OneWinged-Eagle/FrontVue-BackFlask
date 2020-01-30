@@ -1,5 +1,6 @@
 from bson import json_util
 from datetime import datetime
+from json import loads
 
 from db import db
 from .my_query_set import MyQuerySet
@@ -23,5 +24,5 @@ class Product(db.Document):
 
 	def to_json(self):
 		data = self.to_mongo()
-		data["seller"] = self.seller.fetch()
+		data["seller"] = User(**loads(self.seller.fetch().to_json()))
 		return json_util.dumps(data)

@@ -12,4 +12,4 @@ RUN npm run build
 FROM nginx
 
 COPY nginx/default.conf /etc/nginx/conf.d/
-COPY --from=builder /app/dist/ /var/www/app/
+COPY --from=builder /usr/src/app/dist/ /var/www/app/
