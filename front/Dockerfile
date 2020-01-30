@@ -1,10 +1,11 @@
 FROM node AS builder
 
-COPY package.json /app/
-WORKDIR /app/
-RUN npm install
+RUN mkdir /usr/src/app/
+WORKDIR /usr/src/app/
 
-COPY ./ /app/
+COPY ./package.json ./
+RUN npm install
+COPY ./ ./
 RUN npm run build
 
 
