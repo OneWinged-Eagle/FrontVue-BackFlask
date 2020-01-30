@@ -26,13 +26,10 @@
 					/>
 				</v-flex>
 
-				<v-flex xs12 sm6>
+				<v-flex v-if="edit" xs12 sm6>
 					<b>Password:</b>
 
-					<span v-if="!edit && item.password">{{ item.password }}</span>
-
 					<v-text-field
-						v-if="edit"
 						v-model.trim="editedUser.password"
 						color="accent"
 						label="Password"
