@@ -2,6 +2,7 @@ from bson import json_util
 from datetime import datetime
 
 from db import db
+from .my_query_set import MyQuerySet
 from .user import User
 
 
@@ -11,7 +12,7 @@ class Location(db.EmbeddedDocument):
 
 
 class Product(db.Document):
-	meta = {"collection": "products"}
+	meta = {"collection": "products", "queryset_class": MyQuerySet}
 
 	name = db.StringField(required=True)
 	description = db.StringField(required=True)
@@ -22,5 +23,5 @@ class Product(db.Document):
 
 	def to_json(self):
 		data = self.to_mongo()
-		data.seller = self.seller.fetch().to_json()
+		data["seller"] = self.seller.fetch().to_json()
 		return json_util.dumps(data)
