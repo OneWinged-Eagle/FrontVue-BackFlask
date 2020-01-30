@@ -89,7 +89,7 @@ export default class Products extends Vue {
   }
 
   get canAdd() {
-    return userActions.isUser() || this.isAdmin()
+    return userActions.isUser() || this.isAdmin
   }
 }
 </script>
