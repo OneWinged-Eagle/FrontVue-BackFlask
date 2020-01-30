@@ -52,8 +52,11 @@
 
 					<v-list-item-content class="align-end">
 						<router-link
+							v-if="isAdmin"
 							:to="{ name: 'User', params: { id: item.seller._id.$oid }}"
 						>{{ item.seller.email }}</router-link>
+
+						<a v-else :href="`mailto:${item.seller.email}`">{{ item.seller.email }}</a>
 					</v-list-item-content>
 				</v-list-item>
 			</v-list>
@@ -81,8 +84,12 @@ export default class Products extends Vue {
   apiProducts = new ApiProducts()
   fields = ["name", "description", "price", "geolocation", "address", "dateAdded", "seller"]
 
+  get isAdmin() {
+    return userActions.isAdmin()
+  }
+
   get canAdd() {
-    return userActions.isUser() || userActions.isAdmin()
+    return userActions.isUser() || this.isAdmin()
   }
 }
 </script>

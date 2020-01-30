@@ -50,7 +50,7 @@
 				<v-flex xs12 sm6>
 					<b>Geolocation:</b>
 
-					<span v-if="!edit && item.location && item.location">
+					<span v-if="!edit && item.location && item.location.geolocation">
 						Lat:&nbsp;{{ item.location.geolocation[0] }}
 						<br />
 						Lng:&nbsp;{{ item.location.geolocation[1] }}
@@ -67,7 +67,7 @@
 				<v-flex xs12 sm6>
 					<b>Address:</b>
 
-					<span v-if="!edit && item.location.address">{{ item.location.address }}</span>
+					<span v-if="!edit && item.location && item.location.address">{{ item.location.address }}</span>
 
 					<geocoder
 						v-if="edit"
@@ -87,8 +87,11 @@
 
 					<span v-if="item.seller">
 						<router-link
+							v-if="isAdmin"
 							:to="{ name: 'User', params: { id: item.seller._id.$oid }}"
 						>{{ item.seller.email }}</router-link>
+
+						<a v-else :href="`mailto:${item.seller.email}`">{{ item.seller.email }}</a>
 					</span>
 				</v-flex>
 			</v-layout>
@@ -136,8 +139,12 @@ export default class Product extends mixins(Solo) {
   edit = false
   editedProduct = blankProduct
 
+  get isAdmin() {
+    return userActions.isAdmin()
+  }
+
   get canEdit() {
-    return (userActions.isUser() && this.item.seller && userActions.getEmail() === this.item.seller.email) || userActions.isAdmin()
+    return (userActions.isUser() && this.item.seller && userActions.getEmail() === this.item.seller.email) || this.isAdmin
   }
 
   startEditing() {

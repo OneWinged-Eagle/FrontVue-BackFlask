@@ -15,7 +15,7 @@
 				<v-flex xs12 sm6>
 					<b>Email:</b>
 
-					<span v-if="!edit && item.email">{{ item.email }}</span>
+					<a v-if="!edit && item.email" :href="`mailto:${item.email}`">{{ item.email }}</a>
 
 					<v-text-field
 						v-if="edit"

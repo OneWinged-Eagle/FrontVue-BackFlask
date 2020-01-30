@@ -2,7 +2,8 @@
 	<data-iterator :api-core="apiUsers" :fields="fields">
 		<v-card slot="item" slot-scope="{ item, sortBy }">
 			<v-card-title class="subheading font-weight-bold">
-				{{ item.email }}
+				<a :href="`mailto:${item.email}`">{{ item.email }}</a>
+
 				<v-spacer />
 
 				<v-btn dark color="warning" fab small :to="{ name: 'User', params: { id: item._id.$oid }}">

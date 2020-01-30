@@ -63,8 +63,8 @@ class ProductApi(Resource):
 			me, body, product = User.objects.get(
 			    id=get_jwt_identity()), request.get_json(), Product.objects.get(id=id)
 
-			if me.role != "admin" or me.id != product.seller.fetch().id:
-				return {"msg": f"Can't update this product"}, 403
+			if me.role != "admin" and me.id != product.seller.fetch().id:
+				return {"msg": "Can't update this product"}, 403
 
 			product.update(
 			    name=body.get("name", product.name),
@@ -90,7 +90,7 @@ class ProductApi(Resource):
 			me, product = User.objects.get(
 			    id=get_jwt_identity()), Product.objects.get(id=id)
 
-			if me.role != "admin" or me.id != product.seller.fetch().id:
+			if me.role != "admin" and me.id != product.seller.fetch().id:
 				return {"msg": "Can't delete this product"}, 403
 
 			product.delete()
